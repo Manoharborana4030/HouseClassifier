@@ -119,7 +119,7 @@
     <br><br>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <button class="btn btn-outline-primary"><input type="file" name="file"></button>
+        <button class="btn btn-outline-primary"><input type="file" name="images" multiple></button>
         <br>
         <br>    
         <button class="btn btn-outline-primary" type="submit">Submit</button>

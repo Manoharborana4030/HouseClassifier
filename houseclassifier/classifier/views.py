@@ -5,8 +5,13 @@ from .models import *
 from PIL import Image
 import glob
 
+#clear unnecessory images
+noise = PredictedImage.objects.filter(category_name=None)
+noise.delete()
 
+#create instance of ML model
 img_predictor = ImagePredictor()
+
 category_list = ['kitchen','exterior','living room','bedroom','washroom']
 
 
@@ -18,16 +23,23 @@ def category(request):
 
 def predict(request):
     if request.method=='POST':
-        file_name=request.FILES['file']
-        img_obj = PredictedImage(img=file_name)
-        img_obj.save()
+        file_list=request.FILES.getlist('images')
         
-        model_response=img_predictor.predict_image(img_obj.img.url)
-        category_name = category_list[model_response]
-        category_id = model_response
+        img_id_list = list()
+        for file in file_list:
+            img_obj = PredictedImage(img=file)
+            img_obj.save()
 
-        img_obj_up = PredictedImage.objects.filter(id=img_obj.id)\
-        .update(category_name=category_name,category_id=category_id)
+            model_response=img_predictor.predict_image(img_obj.img.url)
+            category_name = category_list[model_response]
+            category_id = model_response
 
-        return render(request,'result.html',{'result':category_name})
+            PredictedImage.objects.filter(id=img_obj.id)\
+            .update(category_name=category_name,category_id=category_id)
+
+            img_id_list.append(img_obj.id)
+
+        result_list = PredictedImage.objects.filter(id__in=img_id_list)
+
+        return render(request,'result.html',{'result_list':result_list})
     return render(request,'predict.html')
