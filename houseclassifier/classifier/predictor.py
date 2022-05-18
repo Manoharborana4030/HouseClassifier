@@ -9,7 +9,7 @@ from .models import PredictedImage
 
 
 class ImagePredictor:
-    def __init__(self):
+    def train_model(self):
         object_list = PredictedImage.objects.values('img','category_id')
     
         # filelist = glob.glob('media/dataset/*.jpg')
