@@ -103,16 +103,32 @@
 	</div>
 	
 </div>	<div class="jumbotron d-flex align-items-center">
-{% if category is None %}
+{% if category is not None %}
   <div class="container text-center">
     <h1 class="display-1 mb-4">I M A G E</h1>
     <h2 class="display-1 mb-4">C A T E G O R Y</h2>
   </div>
 {% else %}
-  <div class="container text-center">
+  {% comment %} <div class="container text-center">
     <h1 class="display-1 mb-4">I M A G E</h1>
     <h2 class="display-1 mb-4">C A T E G O R Y</h2>
-  </div>
+  </div> {% endcomment %}
+  <div class="container">
+    <div class="row imagetiles">
+        {% for i in '100454894445484' %}
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+            <img src="media/dataset/0_img_325.jpg" class="img-responsive">
+            <center><h3>{{i}}</h3></center>   
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+    <style>
+  div.imagetiles div.col-lg-3.col-md-3.col-sm-3.col-xs-6{
+  padding: 20px;
+}
+    </style>
 {% endif %}
   <div class="rectangle-1"></div>
   <div class="rectangle-2"></div>
