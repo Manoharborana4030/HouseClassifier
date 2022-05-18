@@ -3,7 +3,7 @@ from django.core.files.storage import FileSystemStorage
 from .predictor import ImagePredictor
 from .models import *
 from PIL import Image
-import glob
+import threading
 
 #clear unnecessory images
 noise = PredictedImage.objects.filter(category_name=None)
