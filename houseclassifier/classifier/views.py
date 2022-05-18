@@ -21,7 +21,7 @@ def index(request):
 
 def category(request,category=None):
     if category is not None:
-        image_list = PredictedImage.objects.filter(category_name=category)
+        image_list = PredictedImage.objects.filter(category_name=category).order_by('-id')
         return render(request, 'category.html', {'image_list':image_list,'category':category})
     return render(request,'category.html',{'category':category})
 
@@ -46,11 +46,9 @@ def predict(request):
 
             img_id_list.append(img_obj.id)
 
+        # t = threading.Thread(target=img_predictor.train_model())
+        # t.start()
         result_list = PredictedImage.objects.filter(id__in=img_id_list)
-        return render(request,'result.html',{'result_list':result_list})
-        
-        t = threading.Thread(target=img_predictor.train_model())
-        t.start()
-        
+        return render(request,'result.html',{'result_list':result_list})    
 
     return render(request,'predict.html')

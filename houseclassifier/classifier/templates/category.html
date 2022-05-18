@@ -49,19 +49,19 @@
         <div class="collapse navbar-collapse" id="navbar-nav-header">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home Exterior</a>
+                    <a class="nav-link" href="/category/exterior">Home Exterior</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Bedroom</a>
+                    <a class="nav-link" href="/category/bedroom">Bedroom</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Living Room</a>
+                    <a class="nav-link" href="/category/living room">Living Room</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">WashRoom</a>
+                    <a class="nav-link" href="/category/washroom">WashRoom</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Kitchen</a>
+                    <a class="nav-link" href="/category/kitchen">Kitchen</a>
                 </li>
                 <li class="nav-item only-desktop">
                     <a class="nav-link" id="side-nav-open" href="#">
@@ -103,7 +103,7 @@
 	</div>
 	
 </div>	<div class="jumbotron d-flex align-items-center">
-{% if category is not None %}
+{% if category is None %}
   <div class="container text-center">
     <h1 class="display-1 mb-4">I M A G E</h1>
     <h2 class="display-1 mb-4">C A T E G O R Y</h2>
@@ -115,10 +115,9 @@
   </div> {% endcomment %}
   <div class="container">
     <div class="row imagetiles">
-        {% for i in '100454894445484' %}
+        {% for i in image_list %}
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-            <img src="media/dataset/0_img_325.jpg" class="img-responsive">
-            <center><h3>{{i}}</h3></center>   
+            <h1 class="display-1 mb-4"><img src="{{i.img.url}}" class="img-responsive" width="400px"></h1>
         </div>
         {% endfor %}
     </div>

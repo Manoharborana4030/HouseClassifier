@@ -51,7 +51,9 @@ class ImagePredictor:
         img = glob.glob(f'{fname[1:]}')[0]
         img_array = np.array(Image.open(img))
 
-        resized_img = cv2.resize(img_array,(64, 64))
+        # n_channel = list(img_array.shape)[-1]
+
+        resized_img = cv2.resize(img_array,(64,64))
         rescaled_img = resized_img/255.0
         rescaled_img = rescaled_img.reshape(1,64,64,3)
         
