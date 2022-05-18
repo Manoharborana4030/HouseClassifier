@@ -5,15 +5,17 @@ from sklearn.model_selection import train_test_split
 from tensorflow import keras
 from tensorflow.keras import layers, models
 from PIL import Image
+from .models import PredictedImage
 
 
 class ImagePredictor:
-    def __init__(self):       
-        filelist = glob.glob('media/dataset/*.jpg')
+    def __init__(self):
+        object_list = PredictedImage.objects.values('img','category_id')
+    
+        # filelist = glob.glob('media/dataset/*.jpg')
 
-        x = np.array([np.array(Image.open(fname)) for fname in filelist])
-
-        y = np.array([int(i.split('_')[0].split('\\')[1]) for i in filelist])
+        x = np.array([np.array(Image.open('media/'+i['img'])) for i in object_list])
+        y = np.array([i['category_id'] for i in object_list])
 
         resized_x = np.array([cv2.resize(i,(64,64)) for i in x])
 

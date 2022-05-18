@@ -18,8 +18,11 @@ category_list = ['kitchen','exterior','living room','bedroom','washroom']
 def index(request):
     return render(request,'index.html')
 
-def category(request):
-    return render(request,'category.html')
+def category(request,category=None):
+    if category is not None:
+        image_list = PredictedImage.objects.filter(category_name=category)
+        return render(request, 'category.html', {'image_list':image_list,'category':category})
+    return render(request,'category.html',{'category':category})
 
 def result(request):
     return render(request,'result.html')
