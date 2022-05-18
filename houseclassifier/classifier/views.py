@@ -4,7 +4,22 @@ from .predictor import ImagePredictor
 from .models import *
 from PIL import Image
 import threading
-from .thread import TrainModelThread
+
+
+class TrainModelThread(threading.Thread):
+    def run(self):
+        try:
+            print('Thread execution started')
+            #create instance of ML model
+            img__predictor = ImagePredictor()
+            img__predictor.train_model()
+            global img_predictor
+            img_predictor =img__predictor 
+            print('Thread execution finished')
+
+        except Exception as e:
+            print(e,'error')
+
 
 #clear unnecessory images
 noise = PredictedImage.objects.filter(category_name=None)

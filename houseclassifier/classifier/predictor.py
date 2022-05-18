@@ -44,7 +44,7 @@ class ImagePredictor:
             ])
 
         self.cnn.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['accuracy'])
-        self.cnn.fit(scaled_x_train, y_train, epochs=2)
+        self.cnn.fit(scaled_x_train, y_train, epochs=25)
         # cnn.evaluate(scaled_x_test,y_test)
 
     def predict_image(self,fname):
@@ -57,8 +57,10 @@ class ImagePredictor:
 
         resized_img = cv2.resize(img_array,(64,64))
         rescaled_img = resized_img/255.0
-        rescaled_img = rescaled_img.reshape(1,64,64,3)
-        
+        try:
+            rescaled_img = rescaled_img.reshape(1,64,64,3)
+        except Exception as e:
+            print(e,'error on line no 63 in predictor.py')
         predicted = self.cnn.predict(rescaled_img)
         result=np.argmax(predicted)
         return result
