@@ -21,6 +21,9 @@ def index(request):
 def category(request):
     return render(request,'category.html')
 
+def result(request):
+    return render(request,'result.html')
+
 def predict(request):
     if request.method=='POST':
         file_list=request.FILES.getlist('images')

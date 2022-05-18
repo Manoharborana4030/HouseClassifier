@@ -48,30 +48,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar-nav-header">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-
-                {% comment %} <li class="nav-item">
-                    <a class="nav-link" href="about.html">Home Exterior</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.html">Bedroom</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Living Room</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">WashRoom</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Kitchen</a>
-                </li> {% endcomment %}
-                <li class="nav-item">
-                    <a id="side-search-open" class="nav-link" href="#">
-                        <span class="lnr lnr-magnifier"></span>
-                    </a>
-                </li>
                  <li class="nav-item only-desktop">
                     <a class="nav-link" id="side-nav-open" href="#">
                         <span class="lnr lnr-menu"></span>
@@ -86,14 +62,15 @@
 	<a href="javascript:void(0)" id="side-nav-close">&times;</a>
 	
 	<div class="sidenav-content">
-		<p>
+        <p>
 
-		</p>
-		<p>
-            <span class="fs-16 primary-color">Welcome</span>
         </p>
-        <p>info@houseclassifier.com</p>
-	</div>
+        <p>
+        <span class="fs-16 primary-color">Welcome</span>
+        </p>
+        <a class="nav-link" href="/category"><p>Category</p></a>
+        <a class="nav-link" href="/predict"><p>Predict Image</p></a>
+    </div>
 </div><div id="side-search" class="sidenav">
 	<a href="javascript:void(0)" id="side-search-close">&times;</a>
 	<div class="sidenav-content">
@@ -110,12 +87,14 @@
 
 		</form>
 	</div>
-	
-</div>	<div class="jumbotron d-flex align-items-center">
+</div>
+
+<div class="jumbotron d-flex align-items-center">
   <div class="container text-center">
-    <h1 class="display-1 mb-4">{{result}}</h1>
-    {% comment %} <h2 class="display-1 mb-4">P R E D I C T I O N</h2> {% endcomment %}
-    
+    {% for result in result_list %}
+    <h1 class="display-1 mb-4"><img src="{{result.img.url}}" height="350px" width="500px"></h1>
+    <h2 class="display-1 mb-4">{{result.category_name}}</h2><br>
+    {% endfor %}
   </div>
   <div class="rectangle-1"></div>
   <div class="rectangle-2"></div>
