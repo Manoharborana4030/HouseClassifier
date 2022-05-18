@@ -4,14 +4,17 @@ from .predictor import ImagePredictor
 from .models import *
 from PIL import Image
 import threading
+from .thread import TrainModelThread
 
 #clear unnecessory images
 noise = PredictedImage.objects.filter(category_name=None)
 noise.delete()
 
-#create instance of ML model
+
+# create instance of ML model
 img_predictor = ImagePredictor()
 img_predictor.train_model()
+
 
 category_list = ['kitchen','exterior','living room','bedroom','washroom']
 
@@ -46,8 +49,7 @@ def predict(request):
 
             img_id_list.append(img_obj.id)
 
-        # t = threading.Thread(target=img_predictor.train_model())
-        # t.start()
+        TrainModelThread().start()
         result_list = PredictedImage.objects.filter(id__in=img_id_list)
         return render(request,'result.html',{'result_list':result_list})    
 
