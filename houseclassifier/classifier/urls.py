@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.urls import path,include
 from classifier import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('',views.home,name='home'),
-    path('find/',views.find,name='find'),
-    path('prediction',views.predicate,name='prediction'),
-]
+    path('',views.index,name='index'),
+    path('category',views.category,name='category'),
+    path('predict',views.predict,name='predict'),
+] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -1,37 +1,33 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-from .Predicator import ImagePredict
+from .predictor import ImagePredictor
 from .models import *
+from PIL import Image
+import glob
 
-obj=ImagePredict()
 
-def home(request):
+img_predictor = ImagePredictor()
+category_list = ['kitchen','exterior','living room','bedroom','washroom']
 
+
+def index(request):
     return render(request,'index.html')
-def find(request):
 
-    return render(request,'find.html')
-def predicate(request):
+def category(request):
+    return render(request,'category.html')
+
+def predict(request):
     if request.method=='POST':
         file_name=request.FILES['file']
-        print('@@@',file_name)
-        filename_new=file_name.name
-        filename_new=filename_new.replace(" ","_")
-        fs=FileSystemStorage()
-        fs.save(filename_new,file_name)
-        data=obj.predictor(filename_new)
-        temp=None
-        if data == 1:
-            temp='House Exterior'
-        if data == 2:
-            temp='Living Room'
-        if data == 3:
-            temp='Bed Room'
-        if data == 4:
-            temp='Washroom'
-        if data == 0:
-            temp='Kitchen'
-        s_obj=Pre_Image(img_link=f'media/{filename_new}',cat_img=temp)
-        s_obj.save()
-        return render(request,'result.html',{'data':temp})
-    return render(request,'predicate.html')
+        img_obj = PredictedImage(img=file_name)
+        img_obj.save()
+        
+        model_response=img_predictor.predict_image(img_obj.img.url)
+        category_name = category_list[model_response]
+        category_id = model_response
+
+        img_obj_up = PredictedImage.objects.filter(id=img_obj.id)\
+        .update(category_name=category_name,category_id=category_id)
+
+        return render(request,'result.html',{'result':category_name})
+    return render(request,'predict.html')
