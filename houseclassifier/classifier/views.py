@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.core.files.storage import FileSystemStorage
 from .predictor import ImagePredictor
 from .models import *
@@ -28,7 +28,7 @@ noise.delete()
 
 # create instance of ML model
 img_predictor = ImagePredictor()
-img_predictor.train_model()
+# img_predictor.train_model()
 
 
 category_list = ['exterior','living room','bedroom','kitchen','washroom']
@@ -63,7 +63,6 @@ def result(request):
 def predict(request):
     if request.method=='POST':
         file_list=request.FILES.getlist('images')
-        
         img_id_list = list()
         for file in file_list:
             img_obj = PredictedImage(img=file)
@@ -82,3 +81,9 @@ def predict(request):
         result_list = PredictedImage.objects.filter(id__in=img_id_list)
         return render(request,'result.html',{'result_list':result_list})    
     return render(request,'predict.html')
+
+def delete(request,id):
+    obj = PredictedImage.objects.get(id=id)
+    category_name = obj.category_name
+    obj.delete()
+    return redirect('category',category_name)

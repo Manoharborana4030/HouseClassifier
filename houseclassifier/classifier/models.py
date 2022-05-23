@@ -2,7 +2,7 @@ from django.db import models
 
 
 class PredictedImage(models.Model):
-    img = models.ImageField(upload_to='predicted_image')
+    img = models.ImageField(upload_to='predicted_images')
     category_name = models.CharField(max_length=50,null=True)
     category_id = models.IntegerField(null=True)
 
