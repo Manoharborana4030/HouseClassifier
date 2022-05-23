@@ -98,11 +98,11 @@
 			    </button>
 			  </div>
 			</div>
-
 		</form>
-	</div>
-	
-</div>	<div class="jumbotron d-flex align-items-center">
+	</div>	
+</div>
+<div class="jumbotron d-flex align-items-center">
+
 {% if category is None %}
   <div class="container text-center">
     <h1 class="display-1 mb-4">I M A G E</h1>
@@ -113,17 +113,67 @@
     <div class="row imagetiles">
         {% for i in image_list %}
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-            <h1 class="display-1 mb-4"><img src="{{i.img.url}}" class="img-responsive" ></h1>
+            <div class="form-check form-switch">
+                
+               
+                {% comment %} <span class="border border-5">
+                    
+                    <img src="{{i.img.url}}" class="img-responsive" >    
+                    
+                </span> {% endcomment %}
+                <div class="container">
+                    <img src="{{i.img.url}}" class="img-responsive"style="height: 200px; width:300px; border: 5px solid #fff;">
+
+                    <form method="POST" class="manu">
+                        {% csrf_token %}
+                        <div class="dropdown">
+                            <a class="btn btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="lnr lnr-menu"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#">Kitchen</a>
+                              <a class="dropdown-item" href="#">Home Exterior</a>
+                              <a class="dropdown-item" href="#">Living Room</a>
+                              <a class="dropdown-item" href="#">WashRoom</a>
+                              
+                              <a class="dropdown-item" href="#">Delete</a>
+                            </div>
+                          </div>
+                           
+                       
+                    </form>
+                    
+                 </div>
+              </div>
+              
         </div>
         {% endfor %}
+        
     </div>
+    
 </div>
 
-    <style>
-  div.imagetiles div.col-lg-3.col-md-3.col-sm-3.col-xs-6{
-  padding: 20px;
-}
-    </style>
+<style>
+  div.imagetiles div.col-lg-3.col-md-3.col-sm-3.col-xs-6
+    {
+        padding: 20px;
+    }
+    .container 
+    { 
+        position: relative; 
+    }
+    .container img 
+    { 
+        display: block; 
+    }
+    .container .manu 
+    { 
+        position: absolute; 
+        top:0; 
+        left: 15px;; 
+    }
+
+</style>
 {% endif %}
   <div class="rectangle-1"></div>
   <div class="rectangle-2"></div>
