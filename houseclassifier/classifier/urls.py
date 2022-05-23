@@ -24,5 +24,6 @@ urlpatterns = [
     path('category/<str:category>',views.category,name='category'),
     path('predict',views.predict,name='predict'),
     path('result',views.result,name='result'),
-    path('delete/<int:id>',views.delete,name='delete')
+    path('delete/<int:id>',views.delete,name='delete'),
+    path('move/<str:cat_id>',views.move,name='move')
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -35,20 +35,6 @@ category_list = ['exterior','living room','bedroom','kitchen','washroom']
 
 
 def index(request):
-    # filelist = glob.glob('media/dataset/*.jpg')
-    # for f in filelist:
-    #     if 'exterior' in f:
-    #         category_id = 0
-    #     if 'livingroom' in f:
-    #         category_id = 1
-    #     if 'bedroom' in f:
-    #         category_id = 2
-    #     if 'kitchen' in f:
-    #         category_id = 3
-    #     if 'bathroom' in f:
-    #         category_id = 4
-    #     img_obj = PredictedImage(img=f.split('/')[-1],category_id=category_id,category_name=category_list[category_id])
-    #     img_obj.save()
     return render(request,'index.html')
 
 def category(request,category=None):
@@ -87,3 +73,10 @@ def delete(request,id):
     category_name = obj.category_name
     obj.delete()
     return redirect('category',category_name)
+
+def move(request,cat_id):
+    category_name = cat_id.split('_')[0]
+    img_id = int(cat_id.split('_')[1])
+    current_cat_page = PredictedImage.objects.get(id=img_id).category_name
+    PredictedImage.objects.filter(id=img_id).update(category_name=category_name)
+    return redirect('category',current_cat_page)
