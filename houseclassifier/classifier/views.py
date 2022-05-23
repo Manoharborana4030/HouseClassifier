@@ -28,7 +28,7 @@ noise.delete()
 
 # create instance of ML model
 img_predictor = ImagePredictor()
-# img_predictor.train_model()
+img_predictor.train_model()
 
 
 category_list = ['exterior','living room','bedroom','kitchen','washroom']
@@ -79,4 +79,5 @@ def move(request,cat_id):
     img_id = int(cat_id.split('_')[1])
     current_cat_page = PredictedImage.objects.get(id=img_id).category_name
     PredictedImage.objects.filter(id=img_id).update(category_name=category_name)
+    TrainModelThread().start()
     return redirect('category',current_cat_page)
