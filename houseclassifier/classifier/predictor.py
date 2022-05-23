@@ -17,7 +17,17 @@ class ImagePredictor:
         x = np.array([np.array(Image.open('media/'+i['img'])) for i in object_list])
         y = np.array([i['category_id'] for i in object_list])
 
-        resized_x = np.array([cv2.resize(i,(64,64)) for i in x])
+
+        # resized_x = np.array([cv2.resize(i,(64,64)) for i in x])
+        resized_x=[]
+        for i in x:
+          if len(i.shape) > 2 and i.shape[2] == 4:
+            img_array = cv2.cvtColor(i, cv2.COLOR_BGRA2BGR)
+            resized_x.append(cv2.resize(img_array,(64,64)))
+          else:
+            resized_x.append(cv2.resize(i,(64,64)))
+        resized_x=np.array(resized_x)
+
 
         x_train, x_test, y_train, y_test = train_test_split(resized_x, y, test_size=0.1, random_state=2)
 

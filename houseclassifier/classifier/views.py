@@ -3,7 +3,7 @@ from django.core.files.storage import FileSystemStorage
 from .predictor import ImagePredictor
 from .models import *
 from PIL import Image
-import threading
+import threading,glob
 
 
 class TrainModelThread(threading.Thread):
@@ -31,10 +31,24 @@ img_predictor = ImagePredictor()
 img_predictor.train_model()
 
 
-category_list = ['kitchen','exterior','living room','bedroom','washroom']
+category_list = ['exterior','living room','bedroom','kitchen','washroom']
 
 
 def index(request):
+    # filelist = glob.glob('media/dataset/*.jpg')
+    # for f in filelist:
+    #     if 'exterior' in f:
+    #         category_id = 0
+    #     if 'livingroom' in f:
+    #         category_id = 1
+    #     if 'bedroom' in f:
+    #         category_id = 2
+    #     if 'kitchen' in f:
+    #         category_id = 3
+    #     if 'bathroom' in f:
+    #         category_id = 4
+    #     img_obj = PredictedImage(img=f.split('/')[-1],category_id=category_id,category_name=category_list[category_id])
+    #     img_obj.save()
     return render(request,'index.html')
 
 def category(request,category=None):
@@ -67,5 +81,4 @@ def predict(request):
         TrainModelThread().start()
         result_list = PredictedImage.objects.filter(id__in=img_id_list)
         return render(request,'result.html',{'result_list':result_list})    
-
     return render(request,'predict.html')
