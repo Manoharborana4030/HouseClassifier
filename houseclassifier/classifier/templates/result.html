@@ -93,9 +93,54 @@
   <div class="container text-center">
     {% for result in result_list %}
     <h1 class="display-1 mb-4"><img src="{{result.img.url}}" height="350px" width="500px"></h1>
+    <div class="dropdown manu">
+        <a class="btn btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="lnr lnr-menu"></span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          {% if result.category_name != 'exterior' %}
+          <a class="dropdown-item" href="/move_result/exterior_{{result.id}}_{{id_slug}}">Home Exterior</a>
+          {% endif %}
+          {% if result.category_name != 'living room' %}
+          <a class="dropdown-item" href="/move_result/living room_{{result.id}}_{{id_slug}}">Living Room</a>
+          {% endif %}
+          {% if result.category_name != 'bedroom' %}
+          <a class="dropdown-item" href="/move_result/bedroom_{{result.id}}_{{id_slug}}">Bedroom</a>
+          {% endif %}
+          {% if result.category_name != 'kitchen' %}
+          <a class="dropdown-item" href="/move_result/kitchen_{{result.id}}_{{id_slug}}">Kitchen</a>
+          {% endif %}
+          {% if result.category_name != 'washroom' %}
+          <a class="dropdown-item" href="/move_result/washroom_{{result.id}}_{{id_slug}}">Washroom</a>
+          {% endif %}
+          <a class="dropdown-item" href="/delete_result/{{result.id}}_{{id_slug}}" style="color: darkred;">Delete</a>
+        </div>
+      </div>
+
+
     <h2 class="display-1 mb-4">{{result.category_name}}</h2><br>
+        
     {% endfor %}
   </div>
+  <style>
+    .container 
+    { 
+        position: relative; 
+    }
+    .container img 
+    { 
+        display: block; 
+    }
+    .container .manu 
+    { 
+       
+        top:-430px;
+        left: -220px; 
+    }
+
+</style>
+
+
   <div class="rectangle-1"></div>
   <div class="rectangle-2"></div>
   <div class="rectangle-transparent-1"></div>
@@ -116,7 +161,6 @@
   	<img src="{% static 'img/obj_triangle.png' %}" alt="">
   </div>
 </div>	<!-- Features Section-->
-
 
 
 </footer>	<!-- External JS -->

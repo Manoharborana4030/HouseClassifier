@@ -54,7 +54,7 @@ class ImagePredictor:
             ])
 
         self.cnn.compile(optimizer='adam',loss='sparse_categorical_crossentropy',metrics=['accuracy'])
-        self.cnn.fit(scaled_x_train, y_train, epochs=30)
+        self.cnn.fit(scaled_x_train, y_train, epochs=3)
         # cnn.evaluate(scaled_x_test,y_test)
 
     def predict_image(self,fname):

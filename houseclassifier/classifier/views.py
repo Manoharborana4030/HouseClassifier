@@ -3,22 +3,24 @@ from django.core.files.storage import FileSystemStorage
 from .predictor import ImagePredictor
 from .models import *
 from PIL import Image
-import threading,glob
+import threading,glob,time,schedule
 
 
 class TrainModelThread(threading.Thread):
     def run(self):
         try:
-            print('Thread execution started')
+            print('********************* Thread execution started ***************')
             #create instance of ML model
             img__predictor = ImagePredictor()
             img__predictor.train_model()
             global img_predictor
             img_predictor =img__predictor 
-            print('Thread execution finished')
+            print('******************* Thread execution finished *****************')
 
         except Exception as e:
             print(e,'error')
+
+
 
 
 #clear unnecessory images
@@ -62,11 +64,13 @@ def predict(request):
             .update(category_name=category_name,category_id=category_id)
 
             img_id_list.append(img_obj.id)
-
-        TrainModelThread().start()
+        # TrainModelThread().start() # train model again in thread
         result_list = PredictedImage.objects.filter(id__in=img_id_list)
-        return render(request,'result.html',{'result_list':result_list})    
+        str_img_id_list = [str(i) for i in img_id_list]
+        img_id_slug = "-".join(str_img_id_list)
+        return render(request,'result.html',{'result_list':result_list,'id_slug':img_id_slug})    
     return render(request,'predict.html')
+
 
 def delete(request,id):
     obj = PredictedImage.objects.get(id=id)
@@ -74,10 +78,73 @@ def delete(request,id):
     obj.delete()
     return redirect('category',category_name)
 
+
 def move(request,cat_id):
     category_name = cat_id.split('_')[0]
     img_id = int(cat_id.split('_')[1])
     current_cat_page = PredictedImage.objects.get(id=img_id).category_name
     PredictedImage.objects.filter(id=img_id).update(category_name=category_name)
-    TrainModelThread().start()
+    # TrainModelThread().start()
     return redirect('category',current_cat_page)
+
+def delete_result(request,id_idslug):
+    id = int(id_idslug.split('_')[0])
+    obj = PredictedImage.objects.get(id=id)
+    obj.delete()
+    id_slug = id_idslug.split('_')[-1]
+    try:
+        result_list = id_slug.split('-')
+    except:
+        result_list = id_slug
+    result_list = [int(i) for i in result_list]
+    result_list.remove(id)
+    str_img_id_list = [str(i) for i in result_list]
+    img_id_slug = "-".join(str_img_id_list)
+    if len(result_list) != 0:
+        result_list = PredictedImage.objects.filter(id__in=result_list)
+        return render(request,'result.html',{'result_list':result_list,'id_slug':img_id_slug})
+    else:
+        return redirect('index')
+
+def move_result(request,cat_id_idslug):
+    category_name = cat_id_idslug.split('_')[0]
+    img_id = int(cat_id_idslug.split('_')[1])
+    PredictedImage.objects.filter(id=img_id).update(category_name=category_name)
+    id_slug = cat_id_idslug.split('_')[-1]
+    try:
+        result_list = id_slug.split('-')
+    except:
+        result_list = id_slug
+    result_list = [int(i) for i in result_list]
+    str_img_id_list = [str(i) for i in result_list]
+    img_id_slug = "-".join(str_img_id_list)
+    if len(result_list) != 0:
+        result_list = PredictedImage.objects.filter(id__in=result_list)
+        return render(request,'result.html',{'result_list':result_list,'id_slug':img_id_slug})
+    else:
+        return redirect('index')
+
+########### Schedule the model
+current_data_count = PredictedImage.objects.all().count()
+
+def run_scheduled_model():
+    global current_data_count
+    if current_data_count < PredictedImage.objects.all().count():
+        TrainModelThread().start()
+        current_data_count = PredictedImage.objects.all().count()
+    else:
+        print("######## No changes Found #########")
+
+schedule.every(10).seconds.do(run_scheduled_model)
+
+class SchedulerThread(threading.Thread):
+    def run(self):
+        print('############## Scheduler Thread execution started ################')
+        try:
+            while True:
+                schedule.run_pending()
+                time.sleep(1) 
+        except Exception as e:
+            print(e,'error')
+
+SchedulerThread().start()
